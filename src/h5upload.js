@@ -424,6 +424,7 @@
                     if (all == uploadCount) {
                         console.log(all + "个文件上传完毕");
                         doms.fileToUpload.remove();
+                        //input有一个问题就是选择重复的文件不会触发change事件，所以做了一个处理，再每次上传完之后删掉这个元素再新增一个input。
                         $self.append('<input id="fileImage"  style="opacity:0;position:absolute;top: 0;left: 0;width:100%;height:100%" accept="image/*"  type="file" size="30" name="fileselect[]" ' + multiple + '>');
 
                     }
