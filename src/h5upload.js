@@ -280,6 +280,7 @@
             para = $.extend(para, options);
 
             var $self = $(para.filebutton);
+            init();
             //先加入一个file元素
             var multiple = "";  // 设置多选的参数
             para.multiple ? multiple = "multiple" : multiple = "";
@@ -291,7 +292,12 @@
                 // "thumb": $self.find(".thumb"),
                 // "progress": $self.find(".upload-progress")
             };
-
+            function init() {
+                $self.find("#fileImage").remove();
+                $(document).off("change", "#fileImage");
+                $(document).off("click", para.filebutton);
+                $(document).off("click", para.uploadButton);
+            }
             function getBase64Image(img) {
                 var canvas = document.createElement("canvas");
                 canvas.width = img.width;
