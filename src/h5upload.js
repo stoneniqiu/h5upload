@@ -285,8 +285,10 @@
             var multiple = "";  // 设置多选的参数
             para.multiple ? multiple = "multiple" : multiple = "";
             $self.css('position', 'relative');
-            $self.append('<input id="fileImage"  style="opacity:0;position:absolute;top: 0;left: 0;width:100%;height:100%" accept="image/*"  type="file" size="30" name="fileselect[]" ' + multiple + '>');
-
+            var types = ["image/png", "image/jpeg", "image/gif", "image/bmp"];
+            var inputstr = '<span style="position:relative;width: 30px;height: 30px;margin-left: -31px;display: inline-block;vertical-align: bottom;"><input id="fileImage"  style="opacity:0;position:absolute;top: 0;left: 0;width:100%;height:100%" accept="image/jpeg,.jpg,image/gif,.gif,image/png,.png,image/bmp,.bmp,.jpeg"  type="file" size="30" name="fileselect[]" ' + multiple + '></span>';
+            $self.append(inputstr);
+            
             var doms = {
                 "fileToUpload": $self.find("#fileImage"),
                 // "thumb": $self.find(".thumb"),
@@ -359,7 +361,14 @@
                         }
                         var item = files[i];
                         console.log("原图片大小", item.size);
-
+                          if (item.size > 1024 * 1024 * para.maxSize) {
+                            para.onMaxSize("文件太大不能上传!");
+                            return;
+                        }
+                        if (!~types.indexOf(item.type)) {
+                            imClient.showerrorInfo("请选择图片上传!");
+                            return;
+                        }
                         if (item.size > 1024 * 1024 * 2) {
                             console.log("图片大于2M，开始进行压缩...");
 
@@ -431,8 +440,7 @@
                         console.log(all + "个文件上传完毕");
                         doms.fileToUpload.remove();
                         //input有一个问题就是选择重复的文件不会触发change事件，所以做了一个处理，再每次上传完之后删掉这个元素再新增一个input。
-                        $self.append('<input id="fileImage"  style="opacity:0;position:absolute;top: 0;left: 0;width:100%;height:100%" accept="image/*"  type="file" size="30" name="fileselect[]" ' + multiple + '>');
-
+                         $self.append(inputstr);
                     }
                 },
                 uploadFiles: function () {
